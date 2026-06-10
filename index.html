@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Akash Soni — Embedded Software Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0A0E1A;
+      --bg2:       #0F1525;
+      --bg3:       #141B2D;
+      --border:    #1E2A42;
+      --accent:    #00D4FF;
+      --accent2:   #7C3AED;
+      --green:     #00FF9D;
+      --text:      #E2E8F0;
+      --muted:     #64748B;
+      --card:      #111827;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Space Grotesk', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID BG ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2.5rem;
+      background: rgba(10,14,26,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 8rem 2.5rem 4rem;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--green);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 32px; height: 1px;
+      background: var(--green);
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.3rem;
+    }
+    .hero h1 span {
+      display: block;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-title {
+      font-family: var(--mono);
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: var(--muted);
+      margin: 1.2rem 0 2rem;
+      letter-spacing: 0.03em;
+    }
+    .hero-title .highlight { color: var(--accent); }
+    .hero-summary {
+      max-width: 620px;
+      color: #94A3B8;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+    .hero-cta {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+    }
+    .btn {
+      padding: 0.75rem 1.8rem;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 600;
+    }
+    .btn-primary:hover { background: #00b8d9; transform: translateY(-1px); }
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: transparent;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── PULSE DOT ── */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border: 1px solid rgba(0,255,157,0.3);
+      border-radius: 100px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--green);
+      margin-bottom: 2rem;
+    }
+    .pulse {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative; z-index: 1;
+      max-width: 1100px; margin: 0 auto;
+      padding: 5rem 2.5rem;
+    }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.2rem;
+    }
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.4rem 1.6rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .skill-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .skill-card-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .skill-tags {
+      display: flex; flex-wrap: wrap; gap: 0.4rem;
+    }
+    .tag {
+      padding: 0.25rem 0.65rem;
+      border-radius: 3px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      background: rgba(0,212,255,0.08);
+      color: #94A3B8;
+      border: 1px solid rgba(0,212,255,0.15);
+    }
+
+    /* ── EXPERIENCE ── */
+    .timeline { position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+    }
+    .exp-item {
+      padding-left: 2.5rem;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    .exp-item::before {
+      content: '';
+      position: absolute;
+      left: -4px; top: 6px;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 10px var(--accent);
+    }
+    .exp-header { margin-bottom: 0.8rem; }
+    .exp-role {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .exp-meta {
+      display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem;
+      margin-top: 0.3rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .exp-meta .company { color: var(--accent); }
+    .exp-bullets { list-style: none; }
+    .exp-bullets li {
+      position: relative;
+      padding-left: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: #94A3B8;
+      font-size: 0.95rem;
+    }
+    .exp-bullets li::before {
+      content: '▸';
+      position: absolute; left: 0;
+      color: var(--accent2);
+      font-size: 0.75rem;
+      top: 3px;
+    }
+    .exp-bullets strong { color: var(--text); font-weight: 500; }
+
+    /* ── EDUCATION ── */
+    .edu-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .edu-degree { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .edu-school { color: var(--accent); font-size: 0.95rem; }
+    .edu-right { text-align: right; }
+    .edu-cgpa {
+      font-family: var(--mono);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .edu-cgpa-label { font-size: 0.75rem; color: var(--muted); font-family: var(--mono); }
+    .edu-year { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; }
+
+    /* ── ACHIEVEMENTS ── */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.2rem;
+    }
+    .ach-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      border-radius: 4px;
+      padding: 1.4rem 1.6rem;
+      font-size: 0.95rem;
+      color: #94A3B8;
+      line-height: 1.7;
+      transition: border-left-color 0.2s;
+    }
+    .ach-card:hover { border-left-color: var(--accent); }
+
+    /* ── CONTACT ── */
+    .contact-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      padding: 3rem 2.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .contact-item {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-item:hover { color: var(--accent); }
+    .contact-icon { color: var(--accent); font-size: 1rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      position: relative; z-index: 1;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { gap: 1.2rem; }
+      section { padding: 3.5rem 1.2rem; }
+      .hero { padding: 6rem 1.2rem 3rem; }
+      .edu-right { text-align: left; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pulse { animation: none; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">akash.soni<span style="color:var(--green)">_</span></div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="status-badge"><span class="pulse"></span> Open to opportunities</div>
+  <div class="hero-eyebrow">Embedded Software Engineer</div>
+  <h1>Akash<span>Soni</span></h1>
+  <p class="hero-title">
+    <span class="highlight">BLE · FreeRTOS · NB-IoT · OTA · Embedded C</span>
+  </p>
+  <p class="hero-summary">
+    Results-driven Embedded Software Engineer with 3+ years of experience in firmware development for IoT and metering applications. Hands-on with microcontrollers, wireless protocols, and production-ready embedded systems.
+  </p>
+  <div class="hero-cta">
+    <a href="mailto:soniakash8562@gmail.com" class="btn btn-primary">Get in Touch</a>
+    <a href="#experience" class="btn btn-outline">View Experience</a>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">// 01 — Technical Skills</div>
+  <h2 class="section-title">What I work with</h2>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-card-label">Programming</div>
+      <div class="skill-tags">
+        <span class="tag">C</span>
+        <span class="tag">Embedded C</span>
+        <span class="tag">C++</span>
+        <span class="tag">Python</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-label">RTOS</div>
+      <div class="skill-tags">
+        <span class="tag">FreeRTOS</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-label">Communication Protocols</div>
+      <div class="skill-tags">
+        <span class="tag">UART</span><span class="tag">SPI</span><span class="tag">I2C</span>
+        <span class="tag">BLE</span><span class="tag">NB-IoT</span>
+        <span class="tag">CoAP</span><span class="tag">Wired M-Bus</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-label">Microcontrollers & ICs</div>
+      <div class="skill-tags">
+        <span class="tag">TI CC2340R5</span>
+        <span class="tag">MSP430FR6047</span>
+        <span class="tag">Renesas RL78</span>
+        <span class="tag">TSS721A</span>
+        <span class="tag">ADS1231</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-label">Wireless & IoT</div>
+      <div class="skill-tags">
+        <span class="tag">BLE Central/Peripheral</span>
+        <span class="tag">NB-IoT</span>
+        <span class="tag">OTA Firmware Upgrade</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-label">Debug & Test Tools</div>
+      <div class="skill-tags">
+        <span class="tag">JTAG</span>
+        <span class="tag">Oscilloscope</span>
+        <span class="tag">Logic Analyzer</span>
+        <span class="tag">Joulescope</span>
+        <span class="tag">Spectrum Analyzer</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-label">Peripherals & Interfaces</div>
+      <div class="skill-tags">
+        <span class="tag">ADC</span><span class="tag">Timers</span>
+        <span class="tag">LCD</span><span class="tag">GPIO</span><span class="tag">DMA</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-label">IDEs & Tools</div>
+      <div class="skill-tags">
+        <span class="tag">IAR Embedded Workbench</span>
+        <span class="tag">Code Composer Studio</span>
+        <span class="tag">CS+</span><span class="tag">SVN</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">// 02 — Experience</div>
+  <h2 class="section-title">Where I've worked</h2>
+  <div class="timeline">
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-role">Embedded Software Engineer</div>
+        <div class="exp-meta">
+          <span class="company">Genus Power Infrastructure Ltd.</span>
+          <span>Jaipur, India</span>
+          <span>Aug 2024 – Present</span>
+        </div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Designed and implemented <strong>BLE Central</strong> role firmware for periodic data exchange over BLE-to-<strong>NB-IoT</strong> module, enabling seamless wireless IoT communication.</li>
+        <li>Developed Over-the-Air (<strong>OTA</strong>) firmware upgrade solution for BLE-based devices using <strong>TI CC2340R5</strong>, reducing field update time and improving reliability.</li>
+        <li>Built <strong>BLE event handling</strong>, transparent debug mode, and a company-specific serial bootloader with CCFG configuration on <strong>MSP430FR6047</strong> and CC2340R5.</li>
+        <li>Led firmware development for a new BLE-based smart water meter using CC2340R5, MSP430FR6047, and <strong>FreeRTOS</strong>, supporting full <strong>hardware bring-up</strong> and system integration.</li>
+        <li>Integrated pressure sensor data acquisition via <strong>ADS1131 ADC</strong> over <strong>I2C</strong> with firmware-level validation and calibration.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-role">Graduate Engineer Trainee</div>
+        <div class="exp-meta">
+          <span class="company">Genus Power Infrastructure Ltd.</span>
+          <span>Jaipur, India</span>
+          <span>Aug 2023 – Jul 2024</span>
+        </div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Developed and tested <strong>Wired M-Bus</strong> communication firmware for water meter applications using <strong>TSS721A</strong>, enabling reliable meter-to-gateway data transfer.</li>
+        <li>Programmed <strong>RL78</strong> microcontroller to acquire AC voltage measurements using a 24-bit <strong>sigma-delta ADC</strong> and display real-time readings on an LCD module.</li>
+        <li>Collaborated with cross-functional teams on embedded product development, participating in design reviews and validation cycles.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-role">Embedded Software Intern</div>
+        <div class="exp-meta">
+          <span class="company">Genus Power Infrastructure Ltd.</span>
+          <span>Jaipur, India</span>
+          <span>Jan 2023 – Jul 2023</span>
+        </div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Implemented <strong>PPM correction</strong> for RTC oscillator using an internal temperature sensor on the <strong>RL78</strong> microcontroller, improving timekeeping accuracy.</li>
+        <li>Optimized communication driver performance to minimize data transfer latency and improve responsiveness of meter communication systems.</li>
+        <li>Delivered firmware tasks on schedule, supporting production timelines through reliable implementation and testing.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-label">// 03 — Education</div>
+  <h2 class="section-title">Academic Background</h2>
+  <div class="edu-card">
+    <div>
+      <div class="edu-degree">Bachelor of Technology — Electronics & Communication Engineering</div>
+      <div class="edu-school">Jaipur Engineering College & Research Centre</div>
+      <div class="edu-year">2019 – 2023</div>
+    </div>
+    <div class="edu-right">
+      <div class="edu-cgpa">8.1</div>
+      <div class="edu-cgpa-label">CGPA / 10</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="section-label">// 04 — Key Achievements</div>
+  <h2 class="section-title">Highlights</h2>
+  <div class="achievements-grid">
+    <div class="ach-card">Designed end-to-end <strong style="color:var(--text)">OTA firmware upgrade pipeline</strong> for BLE devices, enabling wireless field updates with zero device downtime.</div>
+    <div class="ach-card">Contributed to launch of a new <strong style="color:var(--text)">BLE-based smart water meter product</strong>, from hardware bring-up to production firmware delivery.</div>
+    <div class="ach-card">Implemented <strong style="color:var(--text)">RTC PPM correction algorithm</strong> improving oscillator accuracy across temperature ranges on RL78 platform.</div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CONTACT -->
+<div class="contact-bar" id="contact">
+  <a href="mailto:soniakash8562@gmail.com" class="contact-item">
+    <span class="contact-icon">✉</span> soniakash8562@gmail.com
+  </a>
+  <a href="tel:+919057286646" class="contact-item">
+    <span class="contact-icon">✆</span> +91-9057286646
+  </a>
+  <span class="contact-item">
+    <span class="contact-icon">⌖</span> Jaipur, Rajasthan
+  </span>
+</div>
+
+<footer>
+  Built with HTML · Akash Soni © 2026
+</footer>
+
+</body>
+</html>
